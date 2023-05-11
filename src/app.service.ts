@@ -49,7 +49,7 @@ export class AppService {
   }
   async postQuestions(dto: CreateQuestionDto): Promise<void> {
     const {key, questions: entities} = dto
-    if (key !== this.configService.get<string>('KEY')) {
+    if (key !== this.configService.get<string>('ADD_KEY')) {
       throw new ForbiddenException()
     }
     for (let entity in entities) {
