@@ -1,3 +1,4 @@
+import { ILike, IsNull } from "typeorm"
 
 const constructSkip = (
   limit: number | undefined,
@@ -12,7 +13,41 @@ const constructTake = (
 ): number =>  limit || 50
 
 
+
+const constructWhere = (
+  search: string | undefined,
+  notAnswered: boolean
+) : any => {
+  if (search && notAnswered) {
+    return [
+      {
+        question: ILike(`%${search}%`),
+        correct:  IsNull() 
+      },
+      {
+        variants: ILike(`%${search}%`) ,
+        correct: IsNull()
+      },
+    ]
+  } else if (!search && notAnswered) {
+    return {
+      correct: IsNull()
+    }
+  } else if (search && !notAnswered) {
+    return [
+      {
+        question: ILike(`%${search}%`),
+      },
+      {
+        variants: ILike(`%${search}%`) ,
+      },
+    ]
+  } else {
+    return []
+  }
+}
 export {
   constructTake,
   constructSkip,
+  constructWhere
 }

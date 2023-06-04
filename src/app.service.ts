@@ -5,6 +5,7 @@ import { QuestionEntity } from './entities/Question.entity';
 import { ILike, IsNull, Repository } from 'typeorm';
 import { constructSkip, constructTake } from './helpers';
 import { ConfigService } from '@nestjs/config';
+import { constructWhere } from './helpers/constructOptions';
 
 @Injectable()
 export class AppService {
@@ -15,20 +16,14 @@ export class AppService {
     private configService: ConfigService,
   ) {}
 
-  async getQuestions({limit, page, search, notAnswered}: {limit?: number, page?: number, search?: string, notAnswered: boolean}): Promise<getQuestions> {
-    console.log(notAnswered);
-    
+  async getQuestions({limit, page, search, notAnswered}: {limit?: number, page?: number, search?: string, notAnswered: boolean}): Promise<getQuestions> {    
     const [questions, total] = await this.repo.findAndCount({
       skip: constructSkip(limit, page),
       take: constructTake(limit),
       order: {
         id: 'ASC'
       },
-      where: 
-        {
-          question: search ?  ILike(`%${search}%`) : undefined,
-          correct: notAnswered ? IsNull() : undefined
-        },
+      where: constructWhere(search, notAnswered)
     })
     return {
       questions,
