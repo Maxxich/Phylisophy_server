@@ -1,4 +1,6 @@
 export interface IQuestion{
+  order: number
+  charter: number
   question: string
   variants: string | null | undefined
   correct: string | null | undefined
@@ -6,6 +8,8 @@ export interface IQuestion{
 }
 
 export interface IQuestionNoId{
+  order: number
+  charter: number
   question: string
   variants: string | null
   correct: string

@@ -48,11 +48,13 @@ export class AppService {
       throw new ForbiddenException()
     }
     for (let entity in entities) {
-      const {correct, question, variants} = entities[entity]
+      const {correct, question, variants, charter, order} = entities[entity]
       const questionEntity = this.repo.create({
         correct: correct?.length > 0 ? correct : null, 
         question, 
         variants: variants || null,
+        charter,
+        order
       })
       await this.repo.save(questionEntity)
     }
